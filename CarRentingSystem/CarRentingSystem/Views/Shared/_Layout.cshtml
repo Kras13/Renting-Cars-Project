@@ -1,4 +1,24 @@
-﻿<!DOCTYPE html>
+﻿<script language="JavaScript">
+    startday = new Date();
+    clockStart = startday.getTime();
+
+    function initStopwatch() {
+        var myTime = new Date();
+        var timeNow = myTime.getTime();
+        var timeDiff = timeNow - clockStart;
+        return timeDiff / 1000;
+    }
+
+    function getSecs() {
+        var mySecs = initStopwatch();
+        var mySecs1 = "" + mySecs;
+        mySecs1 = mySecs1.substring(0, mySecs1.indexOf(".")) + " secs.";
+        document.form1.timespent.value = mySecs1
+        window.setTimeout('getSecs()', 1000);
+    }
+</script>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,7 +27,16 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body onload="window.setTimeout('getSecs()',1)">
+    <form name="form1">
+        <p align="center">
+            <strong>
+                Timer:
+            </strong>
+            <input type="text" size="9" name="timespent">
+        </p>
+    </form>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">

@@ -1,12 +1,12 @@
-﻿namespace CarRentingSystem.Controllers
-{
-    using CarRentingSystem.Data;
-    using CarRentingSystem.Data.Models;
-    using CarRentingSystem.Models.Cars;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using CarRentingSystem.Data;
+using CarRentingSystem.Data.Models;
+using CarRentingSystem.Models.Cars;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace CarRentingSystem.Controllers
+{
     public class CarsController : Controller
     {
         private readonly CarRentingDbContext data;
@@ -46,6 +46,11 @@
         [HttpPost]
         public IActionResult Add(AddCarFormModel car)
         {
+            if (!this.data.Categories.Any(c => c.Id == car.CategoryId))
+            {
+                this.ModelState.AddModelError(nameof(car.CategoryId), "Category does not exist!");
+            }
+
             if (!ModelState.IsValid)
             {
                 car.Categories = this.GetCarCategories();
@@ -61,7 +66,7 @@
                     Model = car.Model,
                     Year = car.Year,
                     ImageUrl = car.ImageUrl,
-                    CategoryId = car.CategoryId                    
+                    CategoryId = car.CategoryId
                 });
             this.data.SaveChanges();
 
