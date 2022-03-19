@@ -8,6 +8,8 @@ namespace CarRentingSystem.Data.Models
 
         public string Name { get; set; }
 
+        public string CategoryUrl { get; set; }
+
         public IEnumerable<Car> Cars { get; set; } = new List<Car>();
     }
 }
