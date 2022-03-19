@@ -12,20 +12,20 @@
 
         [Required]
         [MaxLength(DataConstants.CarModelMaxLength)]
-        [MinLength(2,ErrorMessage = "Please enter more than 2 symbols")]
+        [MinLength(2, ErrorMessage = "Please enter more than 2 symbols")]
         public string Model { get; set; }
 
         [Required]
         [MaxLength(DataConstants.CarDescriptionMaxLength)]
-        [MinLength(10,ErrorMessage ="Please enter more than 10 symbols")]
+        [MinLength(10, ErrorMessage = "Please enter more than 10 symbols")]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Image URL is required")]
         [Url]
         public string ImageUrl { get; set; }
 
         [Required]
-        [Range(1980,2018,ErrorMessage ="Year should be in range 1980-2018!")]
+        [Range(1980, 2018, ErrorMessage = "Year should be in range 1980-2018!")]
         public int Year { get; set; }
 
         public int CategoryId { get; set; }

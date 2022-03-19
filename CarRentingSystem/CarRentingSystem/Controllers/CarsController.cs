@@ -71,7 +71,8 @@ namespace CarRentingSystem.Controllers
             this.data.SaveChanges();
 
             TempData["Success"] = "Car added successfully!";
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction(nameof(All));
         }
 
         private IEnumerable<CarCategoryViewModel> GetCarCategories()

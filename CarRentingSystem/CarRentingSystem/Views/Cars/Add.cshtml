@@ -22,10 +22,12 @@
                 <div class="form-group">
                     <label asp-for="Description"></label>
                     <textarea asp-for="Description" class="form-control" placeholder="Vehicle description" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="small text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ImageUrl">Image Url</label>
                     <input asp-for="ImageUrl" class="form-control" placeholder="Yor URL">
+                    <span asp-validation-for="ImageUrl" class="small text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Year">Year</label>
