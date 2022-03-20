@@ -1,4 +1,5 @@
 ﻿using CarRentingSystem.Data;
+using CarRentingSystem.Models.Categories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,13 @@ namespace CarRentingSystem.Controllers
             this.data = data;
         }
 
+        public IActionResult All()
+        {
+            var categories = data.Categories
+                .Select(c => new CategoriesViewModel { Id = c.Id, Name = c.Name, CategoryUrl = c.CategoryUrl});
+
+            return View(categories);
+        }
 
     }
 }

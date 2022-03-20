@@ -6,16 +6,25 @@
 </div>
 
 <div class="row">
-    @*@foreach (var car in Model)
-    {
-        <div class="card">
-            <div id="customDiv">
-                <img width="100" height="200" class="card-img-top" src="@car.ImageUrl" alt="@car.Make @car.Model - @car.Year @car.Category">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-center">@car.Make @car.Model (@car.Year)</h5>
-                    <a href="#" class="btn btn-primary text-center">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-    }*@
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Picture</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 0; }
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <th scope="row">@(++i)</th>
+                    <td><img width="200" height="200" class="card-img-top" src="@category.CategoryUrl" alt="@category.Name"></td>
+                    <td>@category.Name</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
