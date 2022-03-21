@@ -4,6 +4,7 @@ using CarRentingSystem.Models.Cars;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace CarRentingSystem.Controllers
 {
@@ -24,10 +25,21 @@ namespace CarRentingSystem.Controllers
             });
         }
 
-        public IActionResult All()
+        public IActionResult All(string searchCrit)
         {
-            var cars = this.data
-                .Cars
+            // todo: implement data sort + paging
+
+            var carsQuery = this.data.Cars.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchCrit))
+            {
+                carsQuery = carsQuery.Where(c =>
+                c.Make.ToLower().Contains(searchCrit.ToLower()) ||
+                c.Model.ToLower().Contains(searchCrit.ToLower()) ||
+                c.Description.ToLower().Contains(searchCrit.ToLower()));
+            }
+
+            var cars = carsQuery
                 .OrderByDescending(c => c.Id)
                 .Select(c => new CarListingViewModel
                 {
@@ -40,7 +52,7 @@ namespace CarRentingSystem.Controllers
                 })
                 .ToList();
 
-            return View(cars);
+            return View(new AllCarsQueryModel() { Cars = cars });
         }
 
         [HttpPost]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace CarRentingSystem.Models.Cars
 {
@@ -6,7 +7,8 @@ namespace CarRentingSystem.Models.Cars
     {
         public IEnumerable<string> Brands { get; set; }
 
-        public IEnumerable<string> SearchTerm { get; set; }
+        [DisplayName("Search")]
+        public IEnumerable<string> SearchCrit { get; set; }
 
         public CarSorting Sorting { get; set; }
 

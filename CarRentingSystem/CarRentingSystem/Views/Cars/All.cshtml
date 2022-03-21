@@ -1,12 +1,22 @@
-﻿@model IEnumerable<CarListingViewModel>
+﻿@model AllCarsQueryModel
 
-<div class="">
-    <form method="get">
-    </form>
+<div class="form-group">
+    <div class="row">
+        <form method="get">
+            <div class="form-group col-md-3">
+                <input type="submit" class="btn btn-primary" value="Search">
+            </div>
+
+            <div class="col-md-12">
+                <label asp-for="SearchCrit"></label>
+                <input asp-for="SearchCrit" class="form-control" placeholder="BMW, Audi, Mercedes, VW.....">
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="row">
-    @foreach (var car in Model)
+    @foreach (var car in Model.Cars)
     {
         <div class="card">
             <div id="customDiv">
