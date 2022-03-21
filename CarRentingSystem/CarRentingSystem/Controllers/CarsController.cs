@@ -75,11 +75,20 @@ namespace CarRentingSystem.Controllers
             return RedirectToAction(nameof(All));
         }
 
-        public IActionResult Details(int carId)
+        public IActionResult Details(int Id)
         {
-            var selectedCar = data.Cars.FirstOrDefault(c => c.Id == carId);
+            var selectedCar = data.Cars.FirstOrDefault(c => c.Id == Id);
 
-            return View(selectedCar);
+            CarDetailsViewModel carView = new CarDetailsViewModel()
+            {
+                Make = selectedCar.Make,
+                Model = selectedCar.Model,
+                ImageUrl = selectedCar.ImageUrl,
+                Year = selectedCar.Year,
+                Description = selectedCar.Description
+            };
+
+            return View(carView);
         }
 
         private IEnumerable<CarCategoryViewModel> GetCarCategories()

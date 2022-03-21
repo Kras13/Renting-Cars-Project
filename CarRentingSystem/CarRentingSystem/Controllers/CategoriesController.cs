@@ -20,7 +20,7 @@ namespace CarRentingSystem.Controllers
         public IActionResult All()
         {
             var categories = data.Categories
-                .Select(c => new CategoriesViewModel { Id = c.Id, Name = c.Name, CategoryUrl = c.CategoryUrl});
+                .Select(c => new CategoriesViewModel { Id = c.Id, Name = c.Name, CategoryUrl = c.CategoryUrl });
 
             return View(categories);
         }
