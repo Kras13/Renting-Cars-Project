@@ -27,7 +27,7 @@ namespace CarRentingSystem.Controllers
 
         public IActionResult All(string searchCrit)
         {
-            // todo: implement data sort + paging
+            // TODO: implement better data sort
 
             var carsQuery = this.data.Cars.AsQueryable();
 
