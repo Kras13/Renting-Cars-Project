@@ -25,22 +25,41 @@ namespace CarRentingSystem.Controllers
             });
         }
 
-        public IActionResult All(string searchCrit)
+        public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
             // TODO: implement better data sort
 
             var carsQuery = this.data.Cars.AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchCrit))
+            if (!string.IsNullOrEmpty(query.Brand))
+            {
+                carsQuery = carsQuery.Where(c => c.Make == query.Brand);
+            }
+
+            if (!string.IsNullOrEmpty(query.SearchCrit))
             {
                 carsQuery = carsQuery.Where(c =>
-                c.Make.ToLower().Contains(searchCrit.ToLower()) ||
-                c.Model.ToLower().Contains(searchCrit.ToLower()) ||
-                c.Description.ToLower().Contains(searchCrit.ToLower()));
+                c.Make.ToLower().Contains(query.SearchCrit.ToLower()) ||
+                c.Model.ToLower().Contains(query.SearchCrit.ToLower()) ||
+                c.Description.ToLower().Contains(query.SearchCrit.ToLower()));
+            }
+
+            switch (query.Sorting)
+            {
+                case CarSorting.DateCreated:
+                    carsQuery = carsQuery.OrderByDescending(c => c.Id);
+                    break;
+                case CarSorting.Year:
+                    carsQuery = carsQuery.OrderByDescending(c => c.Year);
+                    break;
+                case CarSorting.BrandAndModel:
+                    carsQuery = carsQuery.OrderByDescending(c => c.Make).ThenBy(c => c.Model);
+                    break;
             }
 
             var cars = carsQuery
-                .OrderByDescending(c => c.Id)
+                .Skip((query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage)
+                .Take(AllCarsQueryModel.CarsPerPage)
                 .Select(c => new CarListingViewModel
                 {
                     Id = c.Id,
@@ -52,7 +71,16 @@ namespace CarRentingSystem.Controllers
                 })
                 .ToList();
 
-            return View(new AllCarsQueryModel() { Cars = cars });
+            var carMakes = this.data
+                .Cars
+                .Select(c => c.Make)
+                .Distinct()
+                .ToList();
+
+            query.Brands = carMakes;
+            query.Cars = cars;
+
+            return View(query);
         }
 
         [HttpPost]
