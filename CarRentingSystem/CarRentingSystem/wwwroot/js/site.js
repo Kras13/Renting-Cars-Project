@@ -1,4 +1,17 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿startday = new Date();
+clockStart = startday.getTime();
 
-// Write your JavaScript code.
+function initStopwatch() {
+    var myTime = new Date();
+    var timeNow = myTime.getTime();
+    var timeDiff = timeNow - clockStart;
+    return timeDiff / 1000;
+}
+
+function getSecs() {
+    var mySecs = initStopwatch();
+    var mySecs1 = "" + mySecs;
+    mySecs1 = mySecs1.substring(0, mySecs1.indexOf(".")) + " secs.";
+    document.form1.timespent.value = mySecs1
+    window.setTimeout('getSecs()', 1000);
+}

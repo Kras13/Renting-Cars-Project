@@ -1,4 +1,4 @@
-﻿<script language="JavaScript">
+﻿@*<script language="JavaScript">
     startday = new Date();
     clockStart = startday.getTime();
 
@@ -16,7 +16,7 @@
         document.form1.timespent.value = mySecs1
         window.setTimeout('getSecs()', 1000);
     }
-</script>
+</script>*@
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +26,7 @@
     <title>@ViewData["Title"] - CarRentingSystem</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/cars.css">
 </head>
 <body onload="window.setTimeout('getSecs()',1)">
     <form name="form1">

@@ -57,6 +57,8 @@ namespace CarRentingSystem.Controllers
                     break;
             }
 
+            var totalCarsWithFilter = carsQuery.Count();
+
             var cars = carsQuery
                 .Skip((query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage)
                 .Take(AllCarsQueryModel.CarsPerPage)
@@ -77,6 +79,7 @@ namespace CarRentingSystem.Controllers
                 .Distinct()
                 .ToList();
 
+            query.TotalCars = totalCarsWithFilter;
             query.Brands = carMakes;
             query.Cars = cars;
 

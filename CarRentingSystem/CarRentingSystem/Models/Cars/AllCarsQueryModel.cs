@@ -9,13 +9,15 @@ namespace CarRentingSystem.Models.Cars
 
         public string Brand { get; set; }
 
-        [DisplayName("Makes")]
+        [DisplayName("Brands")]
         public IEnumerable<string> Brands { get; set; }
 
         [DisplayName("Search")]
         public string SearchCrit { get; set; }
 
         public int CurrentPage { get; set; } = 1;
+
+        public int TotalCars { get; set; }
 
         [DisplayName("Sort by")]
         public CarSorting Sorting { get; set; }
