@@ -2,21 +2,21 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Data.DataConstraints;
+    using static Data.DataConstraints.DataConstants.Car;
     public class AddCarFormModel
     {
         [Required]
-        [MaxLength(DataConstants.CarBrandMaxLength)]
+        [MaxLength(BrandMaxLength)]
         [MinLength(2, ErrorMessage = "Please enter more than 2 symbols")]
         public string Make { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.CarModelMaxLength)]
+        [MaxLength(ModelMaxLength)]
         [MinLength(2, ErrorMessage = "Please enter more than 2 symbols")]
         public string Model { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.CarDescriptionMaxLength)]
+        [MaxLength(DescriptionMaxLength)]
         [MinLength(10, ErrorMessage = "Please enter more than 10 symbols")]
         public string Description { get; set; }
 

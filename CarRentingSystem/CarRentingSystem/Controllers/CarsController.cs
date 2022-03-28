@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using CarRentingSystem.Infrastructure;
 
 namespace CarRentingSystem.Controllers
 {
@@ -17,13 +20,58 @@ namespace CarRentingSystem.Controllers
             this.data = data;
         }
 
+        [Authorize]
         public IActionResult Add()
         {
+            if (!UserIsDealer())
+            {
+                return RedirectToAction("Create", "Dealers");
+            }
+
             return View(new AddCarFormModel
             {
                 Categories = this.GetCarCategories()
             });
         }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Add(AddCarFormModel car)
+        {
+            if (!UserIsDealer())
+            {
+                return RedirectToAction("Create", "Dealers");
+            }
+
+            if (!this.data.Categories.Any(c => c.Id == car.CategoryId))
+            {
+                this.ModelState.AddModelError(nameof(car.CategoryId), "Category does not exist!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                car.Categories = this.GetCarCategories();
+
+                return View(car);
+            }
+
+            this.data.Cars
+                .Add(new Car
+                {
+                    Description = car.Description,
+                    Make = car.Make,
+                    Model = car.Model,
+                    Year = car.Year,
+                    ImageUrl = car.ImageUrl,
+                    CategoryId = car.CategoryId
+                });
+            this.data.SaveChanges();
+
+            TempData["Success"] = "Car added successfully!";
+
+            return RedirectToAction(nameof(All));
+        }
+
 
         public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
@@ -86,36 +134,11 @@ namespace CarRentingSystem.Controllers
             return View(query);
         }
 
-        [HttpPost]
-        public IActionResult Add(AddCarFormModel car)
+        private bool UserIsDealer()
         {
-            if (!this.data.Categories.Any(c => c.Id == car.CategoryId))
-            {
-                this.ModelState.AddModelError(nameof(car.CategoryId), "Category does not exist!");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                car.Categories = this.GetCarCategories();
-
-                return View(car);
-            }
-
-            this.data.Cars
-                .Add(new Car
-                {
-                    Description = car.Description,
-                    Make = car.Make,
-                    Model = car.Model,
-                    Year = car.Year,
-                    ImageUrl = car.ImageUrl,
-                    CategoryId = car.CategoryId
-                });
-            this.data.SaveChanges();
-
-            TempData["Success"] = "Car added successfully!";
-
-            return RedirectToAction(nameof(All));
+            return this.data
+                .Dealers
+                .Any(d => d.UserId == User.GetId());
         }
 
         public IActionResult Details(int Id)

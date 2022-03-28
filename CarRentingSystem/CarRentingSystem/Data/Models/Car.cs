@@ -2,21 +2,23 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Data.DataConstraints;
+    using static Data.DataConstraints.DataConstants.Car;
+
     public class Car
     {
         public int Id { get; set; }
 
         [Required]
-        [StringLength(DataConstants.CarBrandMaxLength)]
+        [StringLength(BrandMaxLength)]
         [MinLength(2)]
         public string Make { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.CarModelMaxLength)]
+        [MaxLength(ModelMaxLength)]
         public string Model { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.CarDescriptionMaxLength)]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; }
 
         public string ImageUrl { get; set; }
