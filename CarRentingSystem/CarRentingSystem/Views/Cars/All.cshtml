@@ -47,6 +47,11 @@
     }
 
     var lastPage = Math.Ceiling((double)Model.TotalCars / AllCarsQueryModel.CarsPerPage);
+
+    if (lastPage == 0)
+    {
+        lastPage = 1;
+    }
 }
 
 <div class="row">
