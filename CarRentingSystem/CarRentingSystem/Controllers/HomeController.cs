@@ -3,6 +3,7 @@
     using CarRentingSystem.Data;
     using CarRentingSystem.Models;
     using CarRentingSystem.Models.Home;
+    using CarRentingSystem.Service;
     using Microsoft.AspNetCore.Mvc;
     using System.Diagnostics;
     using System.Linq;
@@ -10,15 +11,16 @@
     public class HomeController : Controller
     {
         private readonly CarRentingDbContext data;
+        private readonly ISummaryService summaryService;
 
-        public HomeController(CarRentingDbContext data)
+        public HomeController(CarRentingDbContext data, ISummaryService summaryService)
         {
             this.data = data;
+            this.summaryService = summaryService;
         }
 
         public IActionResult Index()
         {
-            var totalCars = this.data.Cars.Count();
 
             var cars = this.data
                 .Cars
@@ -34,7 +36,14 @@
                 .Take(3)
                 .ToList();
 
-            return View(new IndexViewModel { TotalCars = totalCars, Cars = cars});
+            var summary = this.summaryService.Total();
+
+            return View(new IndexViewModel
+            {
+                TotalCars = summary.TotalCars,
+                Cars = cars,
+                TotalUsers = summary.TotalUsers
+            });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

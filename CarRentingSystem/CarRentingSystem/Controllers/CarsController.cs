@@ -38,6 +38,19 @@ namespace CarRentingSystem.Controllers
         [Authorize]
         public IActionResult Add(AddCarFormModel car)
         {
+            var currentUserId = User.GetId();
+
+            var dealerId = this.data
+                .Dealers
+                .Where(d => d.UserId == currentUserId)
+                .Select(d => d.Id)
+                .FirstOrDefault();
+
+            if (dealerId == 0)
+            {
+                return RedirectToAction("Become", "Dealers");
+            }
+
             if (!UserIsDealer())
             {
                 return RedirectToAction("Create", "Dealers");
@@ -63,7 +76,8 @@ namespace CarRentingSystem.Controllers
                     Model = car.Model,
                     Year = car.Year,
                     ImageUrl = car.ImageUrl,
-                    CategoryId = car.CategoryId
+                    CategoryId = car.CategoryId,
+                    DealerId = dealerId
                 });
             this.data.SaveChanges();
 
