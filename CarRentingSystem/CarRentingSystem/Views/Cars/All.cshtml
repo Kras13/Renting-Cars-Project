@@ -9,6 +9,11 @@
     }
 </script>
 
+@if (TempData["Success"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+}
+
 <form method="get" id="customForm">
     <div class="container">
         <div class="row">
@@ -46,7 +51,7 @@
         currentPage = 1;
     }
 
-    var lastPage = Math.Ceiling((double)Model.TotalCars / AllCarsQueryModel.CarsPerPage);
+    var lastPage = Math.Ceiling((double)Model.TotalCars / Model.CarsPerPage);
 
     if (lastPage == 0)
     {

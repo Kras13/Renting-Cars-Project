@@ -1,5 +1,6 @@
 ﻿using CarRentingSystem.Data;
 using CarRentingSystem.Models.Cars;
+using CarRentingSystem.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -69,8 +70,8 @@ namespace CarRentingSystem.Service.Car
             var totalCarsWithFilter = carsQuery.Count();
 
             var cars = carsQuery
-                .Skip((currentPage - 1) * AllCarsQueryModel.CarsPerPage)
-                .Take(AllCarsQueryModel.CarsPerPage)
+                .Skip((currentPage - 1) * carsPerPage)
+                .Take(carsPerPage)
                 .Select(c => new CarListingViewModel
                 {
                     Id = c.Id,
@@ -97,8 +98,55 @@ namespace CarRentingSystem.Service.Car
                 CurrentPage = currentPage,
                 SearchCrit = searchCrit,
                 Sorting = sorting,
-                TotalCars = totalCarsWithFilter
+                TotalCars = totalCarsWithFilter,
+                Brands = this.data.Cars.Select(c => c.Make).Distinct()
             };
+        }
+
+        public void SaveCar(SaveCarServiceModel car)
+        {
+            this.data.Cars.Add(new Data.Models.Car()
+            {
+                Make = car.Make,
+                Model = car.Model,
+                CategoryId = car.CategoryId,
+                Description = car.Description,
+                ImageUrl = car.ImageUrl,
+                Year = car.Year,
+                DealerId = car.DealerId
+            });
+            this.data.SaveChanges();
+        }
+
+        public CarDetailsServiceModel CarDetailsById(int id)
+        {
+            var selectedCar = this.data.Cars.FirstOrDefault(c => c.Id == id);
+
+            CarDetailsServiceModel result = null;
+
+            if (selectedCar != null)
+            {
+                result = new CarDetailsServiceModel()
+                {
+                    Id = selectedCar.Id,
+                    Make = selectedCar.Make,
+                    Model = selectedCar.Model,
+                    ImageUrl = selectedCar.ImageUrl,
+                    Description = selectedCar.Description,
+                    Year = selectedCar.Year
+                };
+            }
+
+            return result;
+        }
+
+        public IEnumerable<CategoryServiceModel> GetCategories()
+        {
+            return this.data.Categories.Select(c => new CategoryServiceModel()
+            {
+                Id = c.Id,
+                Name = c.Name
+            });
         }
     }
 }

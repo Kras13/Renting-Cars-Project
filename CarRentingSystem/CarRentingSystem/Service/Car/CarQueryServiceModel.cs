@@ -19,6 +19,8 @@ namespace CarRentingSystem.Service.Car
         public CarSorting Sorting { get; set; }
 
         public IEnumerable<CarServiceModel> Cars { get; set; }
+
+        public IEnumerable<string> Brands { get; set; }
     }
 }
 

@@ -12,11 +12,6 @@
     var thirdCar = cars.Count > 2 ? cars[2] : null;
 }
 
-@if (TempData["Success"] != null)
-{
-    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
-}
-
 @if (!cars.Any())
 {
     <div class="jumbotron">

@@ -1,36 +1,38 @@
-﻿using CarRentingSystem.Data;
-using CarRentingSystem.Data.Models;
+﻿using CarRentingSystem.Data.Models;
 using CarRentingSystem.Models.Cars;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using CarRentingSystem.Infrastructure;
+using CarRentingSystem.Service.Car;
+using CarRentingSystem.Service.User;
 
 namespace CarRentingSystem.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly CarRentingDbContext data;
+        private readonly IUserService userService;
+        private readonly ICarService carService;
 
-        public CarsController(CarRentingDbContext data)
+        public CarsController(IUserService userService, ICarService carService)
         {
-            this.data = data;
+            this.userService = userService;
+            this.carService = carService;
         }
 
         [Authorize]
         public IActionResult Add()
         {
-            if (!UserIsDealer())
+            if (!this.userService.CurrentUser(User.GetId()).IsDealer)
             {
                 return RedirectToAction("Create", "Dealers");
             }
 
             return View(new AddCarFormModel
             {
-                Categories = this.GetCarCategories()
+                Categories = this.carService.GetCategories().Select(c => new CarCategoryViewModel
+                { Id = c.Id, Name = c.Name })
             });
         }
 
@@ -38,48 +40,39 @@ namespace CarRentingSystem.Controllers
         [Authorize]
         public IActionResult Add(AddCarFormModel car)
         {
-            var currentUserId = User.GetId();
+            var currentUser = userService.CurrentUser(User.GetId());
 
-            var dealerId = this.data
-                .Dealers
-                .Where(d => d.UserId == currentUserId)
-                .Select(d => d.Id)
-                .FirstOrDefault();
-
-            if (dealerId == 0)
+            if (!currentUser.IsDealer)
             {
                 return RedirectToAction("Become", "Dealers");
             }
 
-            if (!UserIsDealer())
-            {
-                return RedirectToAction("Create", "Dealers");
-            }
-
-            if (!this.data.Categories.Any(c => c.Id == car.CategoryId))
+            if (!this.carService.GetCategories().Any(c => c.Id == car.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(car.CategoryId), "Category does not exist!");
             }
 
             if (!ModelState.IsValid)
             {
-                car.Categories = this.GetCarCategories();
+                car.Categories = this.carService.GetCategories().Select(c => new CarCategoryViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                });
 
                 return View(car);
             }
 
-            this.data.Cars
-                .Add(new Car
-                {
-                    Description = car.Description,
-                    Make = car.Make,
-                    Model = car.Model,
-                    Year = car.Year,
-                    ImageUrl = car.ImageUrl,
-                    CategoryId = car.CategoryId,
-                    DealerId = dealerId
-                });
-            this.data.SaveChanges();
+            this.carService.SaveCar(new SaveCarServiceModel()
+            {
+                Description = car.Description,
+                Make = car.Make,
+                Model = car.Model,
+                Year = car.Year,
+                ImageUrl = car.ImageUrl,
+                CategoryId = car.CategoryId,
+                DealerId = currentUser.DealerId
+            });
 
             TempData["Success"] = "Car added successfully!";
 
@@ -89,77 +82,29 @@ namespace CarRentingSystem.Controllers
 
         public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
-            // TODO: implement better data sort
+            var resultView = this.carService
+                .QueriedCars(query.Brand, query.SearchCrit, query.Sorting, query.CurrentPage, query.CarsPerPage);
 
-            var carsQuery = this.data.Cars.AsQueryable();
-
-            if (!string.IsNullOrEmpty(query.Brand))
+            query.Cars = resultView.Cars.Select(c => new CarListingViewModel()
             {
-                carsQuery = carsQuery.Where(c => c.Make == query.Brand);
-            }
-
-            if (!string.IsNullOrEmpty(query.SearchCrit))
-            {
-                carsQuery = carsQuery.Where(c =>
-                c.Make.ToLower().Contains(query.SearchCrit.ToLower()) ||
-                c.Model.ToLower().Contains(query.SearchCrit.ToLower()) ||
-                c.Description.ToLower().Contains(query.SearchCrit.ToLower()));
-            }
-
-            switch (query.Sorting)
-            {
-                case CarSorting.DateCreated:
-                    carsQuery = carsQuery.OrderByDescending(c => c.Id);
-                    break;
-                case CarSorting.Year:
-                    carsQuery = carsQuery.OrderByDescending(c => c.Year);
-                    break;
-                case CarSorting.BrandAndModel:
-                    carsQuery = carsQuery.OrderByDescending(c => c.Make).ThenBy(c => c.Model);
-                    break;
-            }
-
-            var totalCarsWithFilter = carsQuery.Count();
-
-            var cars = carsQuery
-                .Skip((query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage)
-                .Take(AllCarsQueryModel.CarsPerPage)
-                .Select(c => new CarListingViewModel
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Year = c.Year,
-                    ImageUrl = c.ImageUrl,
-                    Category = c.Category.Name
-                })
-                .ToList();
-
-            //var cars = carService.CarsByQuery(queryCurrentPage, CarsPerPage, );
-
-            var carMakes = this.data
-                .Cars
-                .Select(c => c.Make)
-                .Distinct()
-                .ToList();
-
-            query.TotalCars = totalCarsWithFilter;
-            query.Brands = carMakes;
-            query.Cars = cars;
+                Id = c.Id,
+                Category = c.Category,
+                ImageUrl = c.ImageUrl,
+                Make = c.Make,
+                Model = c.Model,
+                Year = c.Year
+            });
+            query.Brands = resultView.Brands;
+            query.TotalCars = resultView.TotalCars;
+            query.CurrentPage = resultView.CurrentPage;
+            query.CarsPerPage = resultView.CarsPerPage;
 
             return View(query);
         }
 
-        private bool UserIsDealer()
-        {
-            return this.data
-                .Dealers
-                .Any(d => d.UserId == User.GetId());
-        }
-
         public IActionResult Details(int Id)
         {
-            var selectedCar = data.Cars.FirstOrDefault(c => c.Id == Id);
+            var selectedCar = this.carService.CarDetailsById(Id);
 
             CarDetailsViewModel carView = new CarDetailsViewModel()
             {
@@ -171,16 +116,6 @@ namespace CarRentingSystem.Controllers
             };
 
             return View(carView);
-        }
-
-        private IEnumerable<CarCategoryViewModel> GetCarCategories()
-        {
-            return this.data.Categories
-                .Select(c => new CarCategoryViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                }).ToList();
         }
     }
 }

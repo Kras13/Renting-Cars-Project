@@ -5,7 +5,7 @@ namespace CarRentingSystem.Models.Cars
 {
     public class AllCarsQueryModel
     {
-        public const int CarsPerPage = 3;
+        public int CarsPerPage { get; set; } = 2;
 
         public string Brand { get; set; }
 

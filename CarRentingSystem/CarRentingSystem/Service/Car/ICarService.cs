@@ -13,5 +13,11 @@ namespace CarRentingSystem.Service.Car
             int carsPerPage);
 
         IEnumerable<CarIndexServiceModel> SelectedTopCars(int count);
+
+        void SaveCar(SaveCarServiceModel car);
+
+        CarDetailsServiceModel CarDetailsById(int id);
+
+        IEnumerable<CategoryServiceModel> GetCategories();
     }
 }
