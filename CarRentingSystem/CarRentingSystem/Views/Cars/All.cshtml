@@ -27,6 +27,14 @@
                     }
                 </select>
             </div>
+            <div>
+                <label asp-for="CarsPerPage"></label>
+                <select asp-for="CarsPerPage" class="form-control">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
             <div class="col-sm">
                 <label asp-for="SearchCrit"></label>
                 <input asp-for="SearchCrit" class="form-control" placeholder="BMW, Audi, Mercedes, VW.....">
