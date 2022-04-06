@@ -1,6 +1,6 @@
-﻿namespace CarRentingSystem.Models.Cars
+﻿namespace CarRentingSystem.Service.Car
 {
-    public class CarListingViewModel
+    public class CarIndexServiceModel
     {
         public int Id { get; set; }
 
@@ -11,7 +11,5 @@
         public string ImageUrl { get; set; }
 
         public int Year { get; set; }
-
-        public string Category { get; set; }
     }
 }

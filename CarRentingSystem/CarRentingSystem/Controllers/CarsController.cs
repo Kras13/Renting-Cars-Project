@@ -135,6 +135,8 @@ namespace CarRentingSystem.Controllers
                 })
                 .ToList();
 
+            //var cars = carService.CarsByQuery(queryCurrentPage, CarsPerPage, );
+
             var carMakes = this.data
                 .Cars
                 .Select(c => c.Make)

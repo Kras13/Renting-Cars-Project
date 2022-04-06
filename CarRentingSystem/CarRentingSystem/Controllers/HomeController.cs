@@ -4,44 +4,40 @@
     using CarRentingSystem.Models;
     using CarRentingSystem.Models.Home;
     using CarRentingSystem.Service;
+    using CarRentingSystem.Service.Car;
     using Microsoft.AspNetCore.Mvc;
     using System.Diagnostics;
     using System.Linq;
 
     public class HomeController : Controller
     {
-        private readonly CarRentingDbContext data;
         private readonly ISummaryService summaryService;
+        private readonly ICarService carService;
 
-        public HomeController(CarRentingDbContext data, ISummaryService summaryService)
+        public HomeController(ISummaryService summaryService, ICarService carService)
         {
-            this.data = data;
             this.summaryService = summaryService;
+            this.carService = carService;
         }
 
         public IActionResult Index()
         {
 
-            var cars = this.data
-                .Cars
-                .OrderByDescending(c => c.Id)
-                .Select(c => new CarIndexViewModel
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Year = c.Year,
-                    ImageUrl = c.ImageUrl
-                })
-                .Take(3)
-                .ToList();
+            var cars = this.carService.SelectedTopCars(3);
 
             var summary = this.summaryService.Total();
 
             return View(new IndexViewModel
             {
                 TotalCars = summary.TotalCars,
-                Cars = cars,
+                Cars = cars.Select(c => new CarIndexViewModel 
+                {
+                    Id = c.Id,
+                    ImageUrl = c.ImageUrl,
+                    Make = c.Make,
+                    Model = c.Model,
+                    Year = c.Year
+                }).ToList(),
                 TotalUsers = summary.TotalUsers
             });
         }

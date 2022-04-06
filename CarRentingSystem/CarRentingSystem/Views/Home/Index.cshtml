@@ -33,7 +33,7 @@
     <div class="carousel-inner">
         @if (firstCar != null)
         {
-            <div class="carousel-item active">
+            <div class="carousel-item">
                 <img class="d-block w-100" src="@firstCar.ImageUrl" alt="@firstCar.Make @firstCar.Model">
                 <div class="carousel-caption d-none d-md-block">
                     <h5><a class="btn-info" asp-controller="Cars" asp-action="Details" asp-route-id="@firstCar.Id">@firstCar.Make @firstCar.Model - @firstCar.Year</a></h5>
