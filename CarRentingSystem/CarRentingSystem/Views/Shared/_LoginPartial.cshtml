@@ -1,13 +1,26 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using CarRentingSystem.Service.Dealer
+
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject IDealerService DealerService
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Dealers" asp-action="Create">Become Dealer</a>
-        </li>
+        if (DealerService.IsDealer(User.GetId()))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Cars" asp-action="Mine">My Cars</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Dealers" asp-action="Create">Become Dealer</a>
+            </li>
+        }
+
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
         </li>

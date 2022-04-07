@@ -19,5 +19,7 @@ namespace CarRentingSystem.Service.Car
         CarDetailsServiceModel CarDetailsById(int id);
 
         IEnumerable<CategoryServiceModel> GetCategories();
+
+        IEnumerable<CarServiceModel> GetDealerCars(string dealerId);
     }
 }

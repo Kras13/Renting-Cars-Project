@@ -4,6 +4,7 @@ namespace CarRentingSystem
     using CarRentingSystem.Infrastructure;
     using CarRentingSystem.Service;
     using CarRentingSystem.Service.Car;
+    using CarRentingSystem.Service.Dealer;
     using CarRentingSystem.Service.User;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -44,6 +45,7 @@ namespace CarRentingSystem
             services.AddTransient<ISummaryService, SummaryService>();
             services.AddTransient<ICarService, CarService>();            
             services.AddTransient<IUserService, UserService>();            
+            services.AddTransient<IDealerService, DealerService>();            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

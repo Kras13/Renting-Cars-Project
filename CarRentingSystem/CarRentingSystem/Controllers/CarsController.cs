@@ -1,7 +1,5 @@
-﻿using CarRentingSystem.Data.Models;
-using CarRentingSystem.Models.Cars;
+﻿using CarRentingSystem.Models.Cars;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using CarRentingSystem.Infrastructure;
@@ -96,8 +94,8 @@ namespace CarRentingSystem.Controllers
             });
             query.Brands = resultView.Brands;
             query.TotalCars = resultView.TotalCars;
-            query.CurrentPage = resultView.CurrentPage;
-            query.CarsPerPage = resultView.CarsPerPage;
+           // query.CurrentPage = resultView.CurrentPage;
+            //query.CarsPerPage = resultView.CarsPerPage;
 
             return View(query);
         }

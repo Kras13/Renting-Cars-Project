@@ -148,5 +148,22 @@ namespace CarRentingSystem.Service.Car
                 Name = c.Name
             });
         }
+
+        public IEnumerable<CarServiceModel> GetDealerCars(string dealerId)
+        {
+            var selectedDealer = this.data.Dealers.FirstOrDefault(d => d.UserId == dealerId);
+
+            return this.data.Cars
+                .Where(c => c.DealerId == selectedDealer.Id)
+                .Select(c => new CarServiceModel()
+                {
+                    Id = c.Id,
+                    Category = c.Category.Name,
+                    ImageUrl = c.ImageUrl,
+                    Make = c.Make,
+                    Model = c.Model,
+                    Year = c.Year
+                });
+        }
     }
 }
