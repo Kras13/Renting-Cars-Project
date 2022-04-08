@@ -18,7 +18,8 @@ namespace CarRentingSystem.Controllers
 
         public IActionResult All()
         {
-            var categories = data.Categories
+            var categories = carService
+                .GetCategories()
                 .Select(c => new CategoriesViewModel { Id = c.Id, Name = c.Name, CategoryUrl = c.CategoryUrl });
 
             return View(categories);
