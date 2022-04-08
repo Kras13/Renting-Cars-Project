@@ -1,20 +1,19 @@
 ﻿using CarRentingSystem.Data;
+using CarRentingSystem.Models.Cars;
 using CarRentingSystem.Models.Categories;
+using CarRentingSystem.Service.Car;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CarRentingSystem.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly CarRentingDbContext data;
+        private readonly ICarService carService;
 
-        public CategoriesController(CarRentingDbContext data)
+        public CategoriesController(ICarService carService)
         {
-            this.data = data;
+            this.carService = carService;
         }
 
         public IActionResult All()
@@ -25,5 +24,21 @@ namespace CarRentingSystem.Controllers
             return View(categories);
         }
 
+
+        public IActionResult Cars(int id)
+        {
+            var selectedCars = this.carService.GetCarsByCategoryId(id)
+                .Select(c => new CarListingViewModel()
+                {
+                    Id = c.Id,
+                    Make = c.Make,
+                    Model = c.Model,
+                    Category = c.Category,
+                    ImageUrl = c.ImageUrl,
+                    Year = c.Year
+                }).ToList();
+
+            return View(selectedCars);
+        }
     }
 }

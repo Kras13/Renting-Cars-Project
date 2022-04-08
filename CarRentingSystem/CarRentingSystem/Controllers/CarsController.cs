@@ -94,7 +94,7 @@ namespace CarRentingSystem.Controllers
             });
             query.Brands = resultView.Brands;
             query.TotalCars = resultView.TotalCars;
-           // query.CurrentPage = resultView.CurrentPage;
+            // query.CurrentPage = resultView.CurrentPage;
             //query.CarsPerPage = resultView.CarsPerPage;
 
             return View(query);
@@ -114,6 +114,25 @@ namespace CarRentingSystem.Controllers
             };
 
             return View(carView);
+        }
+
+        [Authorize]
+        public IActionResult Mine()
+        {
+            // check if currentUserIsDealer
+
+            var currentUserCars = this.carService.GetDealerCars(User.GetId())
+                .Select(c => new CarListingViewModel()
+                {
+                    Id = c.Id,
+                    Make = c.Make,
+                    Model = c.Model,
+                    Year = c.Year,
+                    Category = c.Category,
+                    ImageUrl = c.ImageUrl
+                }).ToList();
+
+            return View(currentUserCars);
         }
     }
 }
