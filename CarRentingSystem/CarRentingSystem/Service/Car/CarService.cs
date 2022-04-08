@@ -145,7 +145,8 @@ namespace CarRentingSystem.Service.Car
             return this.data.Categories.Select(c => new CategoryServiceModel()
             {
                 Id = c.Id,
-                Name = c.Name
+                Name = c.Name,
+                CategoryUrl = c.CategoryUrl
             });
         }
 

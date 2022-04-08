@@ -1,5 +1,4 @@
-﻿using CarRentingSystem.Data;
-using CarRentingSystem.Models.Cars;
+﻿using CarRentingSystem.Models.Cars;
 using CarRentingSystem.Models.Categories;
 using CarRentingSystem.Service.Car;
 using Microsoft.AspNetCore.Mvc;
