@@ -8,12 +8,11 @@
                 <img width="100" height="200" class="card-img-top" src="@car.ImageUrl" alt="@car.Make @car.Model - @car.Year @car.Category">
                 <div class="card-body text-center">
                     <h5 class="card-title text-center">@car.Make @car.Model (@car.Year)</h5>
-                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id">View Details</a>
+                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" class="btn btn-info">View Details</a>
                     @if (ViewBag.EditAllowed == true)
                     {
-                        <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id">View Details</a>
-                        <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id">View Details</a>
-                        <span>Edit</span>
+                        <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger">Delete</a>
                     }
                 </div>
             </div>
