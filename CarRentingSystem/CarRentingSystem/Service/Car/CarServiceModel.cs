@@ -1,6 +1,4 @@
-﻿using CarRentingSystem.Models.Cars;
-
-namespace CarRentingSystem.Service.Car
+﻿namespace CarRentingSystem.Service.Car
 {
     public class CarServiceModel
     {

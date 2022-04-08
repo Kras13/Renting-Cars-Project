@@ -19,7 +19,10 @@
             @foreach (var category in Model)
             {
                 <tr>
-                    <th scope="row">@(++i)</th>
+                    <th scope="row">
+                        @(++i)
+                        <a asp-controller="Categories" asp-action="Cars" asp-route-id="@category.Id">View cars</a>
+                    </th>
                     <td><img width="200" height="200" class="card-img-top" src="@category.CategoryUrl" alt="@category.Name"></td>
                     <td>@category.Name</td>
                     <td></td>

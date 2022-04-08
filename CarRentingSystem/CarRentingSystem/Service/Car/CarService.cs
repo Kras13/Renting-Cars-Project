@@ -151,10 +151,8 @@ namespace CarRentingSystem.Service.Car
 
         public IEnumerable<CarServiceModel> GetDealerCars(string dealerId)
         {
-            var selectedDealer = this.data.Dealers.FirstOrDefault(d => d.UserId == dealerId);
-
             return this.data.Cars
-                .Where(c => c.DealerId == selectedDealer.Id)
+                .Where(c => c.Dealer.UserId == dealerId)
                 .Select(c => new CarServiceModel()
                 {
                     Id = c.Id,
@@ -162,6 +160,21 @@ namespace CarRentingSystem.Service.Car
                     ImageUrl = c.ImageUrl,
                     Make = c.Make,
                     Model = c.Model,
+                    Year = c.Year
+                });
+        }
+
+        public IEnumerable<CarServiceModel> GetCarsByCategoryId(int categoryId)
+        {
+            return this.data.Cars
+                .Where(c => c.CategoryId == categoryId)
+                .Select(c => new CarServiceModel()
+                {
+                    Id = c.Id,
+                    Category = c.Category.Name,
+                    Make = c.Make,
+                    Model = c.Model,
+                    ImageUrl = c.ImageUrl,
                     Year = c.Year
                 });
         }
