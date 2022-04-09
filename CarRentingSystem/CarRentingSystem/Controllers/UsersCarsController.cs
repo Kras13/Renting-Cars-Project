@@ -1,4 +1,5 @@
 ﻿using CarRentingSystem.Models.Cars;
+using CarRentingSystem.Service.Car;
 using CarRentingSystem.Service.UserCar;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +10,16 @@ namespace CarRentingSystem.Controllers
     public class UsersCarsController : Controller
     {
         private readonly IUserCarService userCarService;
+        private readonly ICarService carService;
 
-        public UsersCarsController(IUserCarService userCarService)
+        public UsersCarsController(IUserCarService userCarService, ICarService carService)
         {
             this.userCarService = userCarService;
+            this.carService = carService;
         }
 
         [Authorize]
-        public IActionResult Rent()
+        public IActionResult Available()
         {
             var freeCars = userCarService.FindFreeCars().Select(c => new CarListingViewModel() 
             {
@@ -32,16 +35,20 @@ namespace CarRentingSystem.Controllers
         }
 
         [Authorize]
-        [HttpPost]
         public IActionResult Rent(int id)
         {
-            // add validation if car exists
+            var selectedCar = carService.CarDetailsById(id);
 
-            // if successfull
+            return View(selectedCar);
+        }
 
-            ViewBag.SuccessfullyRentedCar = true;
+        [Authorize]
+        [HttpPost]
+        public IActionResult Finalize(int id)
+        {
+            int name = 5;
 
-            return RedirectToAction("Index", "Home");
+            return View();
         }
     }
 }
