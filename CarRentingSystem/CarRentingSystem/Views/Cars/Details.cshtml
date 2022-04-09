@@ -23,3 +23,15 @@
         </tbody>
     </table>
 </div>
+
+@if (ViewBag.RentingCar == true)
+{
+<form method="post">
+    <div class="col-md-6">
+        <a class="btn btn-primary float-right"
+           asp-controller="UsersCars"
+           asp-action="Rent"
+           asp-route-id="@(Model.Id)">Next</a>
+    </div>
+</form>
+}

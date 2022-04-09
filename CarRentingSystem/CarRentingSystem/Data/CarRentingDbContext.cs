@@ -1,9 +1,9 @@
 ﻿namespace CarRentingSystem.Data
 {
     using CarRentingSystem.Data.Models;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using System;
 
     public class CarRentingDbContext : IdentityDbContext<User>
     {
@@ -18,6 +18,8 @@
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Dealer> Dealers { get; set; }
+
+        public DbSet<UserCar> UsersCars { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -40,6 +42,9 @@
                 .WithOne()
                 .HasForeignKey<Dealer>(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<UserCar>()
+                .HasKey(c => new { c.UserId, c.CarId });
 
             base.OnModelCreating(builder);
         }

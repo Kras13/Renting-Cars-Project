@@ -106,6 +106,7 @@ namespace CarRentingSystem.Controllers
 
             CarDetailsViewModel carView = new CarDetailsViewModel()
             {
+                Id = selectedCar.Id,
                 Make = selectedCar.Make,
                 Model = selectedCar.Model,
                 ImageUrl = selectedCar.ImageUrl,
