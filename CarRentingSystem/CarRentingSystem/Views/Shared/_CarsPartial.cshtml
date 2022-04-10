@@ -8,18 +8,15 @@
                 <img width="100" height="200" class="card-img-top" src="@car.ImageUrl" alt="@car.Make @car.Model - @car.Year @car.Category">
                 <div class="card-body text-center">
                     <h5 class="card-title text-center">@car.Make @car.Model (@car.Year)</h5>
-                    @if (ViewBag.RentingCar = true)
+                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" class="btn btn-info">View Details</a>
+                    @if (ViewBag.EditAllowed == true || User.IsInRole(WebConstants.AdministratorRoleName))
                     {
-                        <a asp-controller="UsersCars" asp-action="Rent" asp-route-id="@car.Id" class="btn btn-info">Rent</a>
+                        <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger">Delete</a>
                     }
                     else
                     {
-                        <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" class="btn btn-info">View Details</a>
-                        @if (ViewBag.EditAllowed == true)
-                        {
-                            <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
-                            <a asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger">Delete</a>
-                        }
+                        <a asp-controller="UsersCars" asp-action="Rent" asp-route-id="@car.Id" class="btn btn-info">Rent</a>
                     }
                 </div>
             </div>

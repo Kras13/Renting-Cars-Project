@@ -1,24 +1,30 @@
-﻿namespace CarRentingSystem.Infrastructure
-{
-    using CarRentingSystem.Data;
-    using CarRentingSystem.Data.Models;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
-    using System.Linq;
+﻿using CarRentingSystem.Data;
+using CarRentingSystem.Data.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using static CarRentingSystem.WebConstants;
 
+namespace CarRentingSystem.Infrastructure
+{
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder PrepareDatabase(
             this IApplicationBuilder app)
         {
             using var scopedServices = app.ApplicationServices.CreateScope();
+            var serviceProvider = scopedServices.ServiceProvider;
 
-            var data = scopedServices.ServiceProvider.GetService<CarRentingDbContext>();
+            var data = serviceProvider.GetRequiredService<CarRentingDbContext>();
 
             data.Database.Migrate();
 
             SeedCategories(data);
+            SeedAdministrator(serviceProvider);
 
             return app;
         }
@@ -61,6 +67,40 @@
             }
 
             data.SaveChanges();
+        }
+
+        private static void SeedAdministrator(IServiceProvider services)
+        {
+            var userManager = services.GetRequiredService<UserManager<User>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            Task.Run(async () =>
+            {
+                if (await roleManager.RoleExistsAsync(AdministratorRoleName))
+                {
+                    return;
+                }
+
+                var role = new IdentityRole { Name = AdministratorRoleName };
+
+                await roleManager.CreateAsync(role);
+
+                string adminEmail = "admin@abv.bg";
+                string adminPassword = "admin123";
+
+                var user = new User()
+                {
+                    Email = adminEmail,
+                    UserName = adminEmail,
+                    FullName = "Admin"
+                };
+
+                await userManager.CreateAsync(user, adminPassword);
+
+                await userManager.AddToRoleAsync(user, role.Name);
+            })
+            .GetAwaiter()
+            .GetResult();
         }
     }
 }
