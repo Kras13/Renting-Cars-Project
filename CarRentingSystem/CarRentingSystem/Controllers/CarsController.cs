@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using CarRentingSystem.Infrastructure;
 using CarRentingSystem.Service.Car;
 using CarRentingSystem.Service.User;
+using CarRentingSystem.Service.Dealer;
+using System;
 
 namespace CarRentingSystem.Controllers
 {
@@ -12,11 +14,13 @@ namespace CarRentingSystem.Controllers
     {
         private readonly IUserService userService;
         private readonly ICarService carService;
+        private readonly IDealerService dealerService;
 
-        public CarsController(IUserService userService, ICarService carService)
+        public CarsController(IUserService userService, ICarService carService, IDealerService dealerService)
         {
             this.userService = userService;
             this.carService = carService;
+            this.dealerService = dealerService;
         }
 
         [Authorize]
@@ -120,6 +124,10 @@ namespace CarRentingSystem.Controllers
         [Authorize]
         public IActionResult Mine()
         {
+            if (!(User.IsAdmin() || dealerService.IsDealer(User.GetId())))
+            {
+                throw new InvalidOperationException("Cars/Mine...");
+            }
             // check if currentUserIsDealer
 
             var currentUserCars = this.carService.GetDealerCars(User.GetId())
