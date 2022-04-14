@@ -44,7 +44,7 @@ namespace CarRentingSystem.Service.UserCar
             return result;
         }
 
-        public bool RentCar(string userId, int carId)
+        public bool RentCar(string userId, int carId, int days)
         {
             if (!CarFree(carId))
             {
@@ -54,7 +54,8 @@ namespace CarRentingSystem.Service.UserCar
             this.data.UsersCars.Add(new Data.Models.UserCar()
             {
                 CarId = carId,
-                UserId = userId
+                UserId = userId,
+                RentDays = days
             });
 
             this.data.SaveChanges();

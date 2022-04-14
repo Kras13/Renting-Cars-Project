@@ -1,6 +1,15 @@
 ﻿@using CarRentingSystem.Service.Car
 @model CarDetailsServiceModel
 
+<script>
+    function CustomFunc(){
+        var e = document.getElementById("customInput");
+        var result = e.options[e.selectedIndex].text;
+
+        return result;
+    }
+</script>
+
 <h1>
     Are you sure you want to rent the selected car.
 </h1>
@@ -32,12 +41,24 @@
 
 <img width="100" height="200" class="card-img-top" src="@Model.ImageUrl" alt="@Model.Make @Model.Model - @Model.Year">
 
+@{
+    int days = 3;
+}
+
 <form method="post">
     <div class="col-md-6">
+        <div>
+            <select class="form-control" id="customInput">
+                <option value="2">1</option>
+                <option value="3">2</option>
+                <option value="10">3</option>
+            </select>
+        </div>
 
         <input class="btn btn-primary" type="submit" value="Save"
-        asp-controller="UsersCars"
-           asp-action="Finalize"
-           asp-route-id=@(Model.Id)/>
+               asp-controller="UsersCars"
+               asp-action="Rent"
+               asp-route-id=@(Model.Id)
+               asp-route-days=3 />
     </div>
 </form>

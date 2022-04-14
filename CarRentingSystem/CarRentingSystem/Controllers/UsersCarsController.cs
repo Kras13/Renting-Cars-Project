@@ -1,4 +1,5 @@
-﻿using CarRentingSystem.Models.Cars;
+﻿using CarRentingSystem.Infrastructure;
+using CarRentingSystem.Models.Cars;
 using CarRentingSystem.Service.Car;
 using CarRentingSystem.Service.UserCar;
 using Microsoft.AspNetCore.Authorization;
@@ -44,9 +45,9 @@ namespace CarRentingSystem.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Finalize(int id)
+        public IActionResult Rent(int id, int days)
         {
-            int name = 5;
+            this.userCarService.RentCar(User.GetId(),id, days);
 
             return View();
         }
