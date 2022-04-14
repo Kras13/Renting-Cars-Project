@@ -31,7 +31,7 @@ namespace CarRentingSystem.Controllers
                 return RedirectToAction("Create", "Dealers");
             }
 
-            return View(new AddCarFormModel
+            return View(new CarFormModel
             {
                 Categories = this.carService.GetCategories().Select(c => new CarCategoryViewModel
                 { Id = c.Id, Name = c.Name })
@@ -40,7 +40,7 @@ namespace CarRentingSystem.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddCarFormModel car)
+        public IActionResult Add(CarFormModel car)
         {
             var currentUser = userService.CurrentUser(User.GetId());
 
@@ -142,6 +142,63 @@ namespace CarRentingSystem.Controllers
                 }).ToList();
 
             return View(currentUserCars);
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            if (!(User.IsAdmin() || dealerService.IsDealer(User.GetId())))
+            {
+                return RedirectToAction(nameof(DealersController.Create), "DealersController");
+            }
+
+            var car = this.carService.CarDetailsById(id);
+
+            var model = new CarFormModel()
+            {
+                Id = car.Id,
+                Description = car.Description,
+                ImageUrl = car.ImageUrl,
+                Make = car.Make,
+                Model = car.Model,
+                Year = car.Year,
+                CategoryId = car.CategoryId
+            };
+
+            model.Categories = this.carService.GetCategories().Select(c => new CarCategoryViewModel()
+            {
+                Id = c.Id,
+                Name = c.Name
+            });
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Edit(int id, CarFormModel car)
+        {
+            var currentUser = userService.CurrentUser(User.GetId());
+
+            if (!currentUser.IsDealer)
+            {
+                return RedirectToAction("Become", "Dealers");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                car.Categories = this.carService.GetCategories().Select(c => new CarCategoryViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                });
+
+                return View(car);
+            }
+
+            this.carService.Edit(car.Id, car.Make, car.Model, car.Description, car.Year, currentUser.DealerId);
+
+            return RedirectToAction(nameof(Mine));
         }
     }
 }

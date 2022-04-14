@@ -3,6 +3,7 @@ using CarRentingSystem.Models.Cars;
 using CarRentingSystem.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace CarRentingSystem.Service.Car
 {
@@ -178,6 +179,25 @@ namespace CarRentingSystem.Service.Car
                     ImageUrl = c.ImageUrl,
                     Year = c.Year
                 });
+        }
+
+        public bool Edit(int id, string brand, string model, string description, int year, int dealerId)
+        {
+            var selectedCar = this.data.Cars.FirstOrDefault(c => c.Id == id && c.DealerId == dealerId);
+
+            if (selectedCar == null)
+            {
+                throw new InvalidOperationException("Can not edi the selected car!");
+            }
+
+            selectedCar.Make = brand;
+            selectedCar.Model = model;
+            selectedCar.Description = description;
+            selectedCar.Year = year;
+
+            this.data.SaveChanges();
+
+            return true;
         }
     }
 }

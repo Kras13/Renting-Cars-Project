@@ -3,8 +3,10 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static Data.DataConstraints.DataConstants.Car;
-    public class AddCarFormModel
+    public class CarFormModel
     {
+        public int Id { get; set; }
+
         [Required]
         [MaxLength(BrandMaxLength)]
         [MinLength(2, ErrorMessage = "Please enter more than 2 symbols")]
