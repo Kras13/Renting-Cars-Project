@@ -2,7 +2,7 @@
 @model CarDetailsServiceModel
 
 <script>
-    function CustomFunc(){
+    function CustomFunc() {
         var e = document.getElementById("customInput");
         var result = e.options[e.selectedIndex].text;
 
@@ -31,7 +31,6 @@
                 <td>@Model.Model</td>
                 <td>@Model.Year</td>
                 <td>@Model.Description</td>
-                <td>@Model.ImageUrl</td>
                 <td></td>
             </tr>
             }
@@ -39,22 +38,26 @@
     </table>
 </div>
 
-<img width="100" height="200" class="card-img-top" src="@Model.ImageUrl" alt="@Model.Make @Model.Model - @Model.Year">
+<div>
+    <img width="500" height="500" class="card-img-top" src="@Model.ImageUrl" alt="@Model.Make @Model.Model - @Model.Year">
+</div>
+
 
 @{
     int days = 3;
 }
 
+<div>
+    <label>Days to Rent</label>
+    <select class="form-control">
+        <option value="2">1</option>
+        <option value="3">2</option>
+        <option value="10">3</option>
+    </select>
+</div>
+
 <form method="post">
     <div class="col-md-6">
-        <div>
-            <select class="form-control" id="customInput">
-                <option value="2">1</option>
-                <option value="3">2</option>
-                <option value="10">3</option>
-            </select>
-        </div>
-
         <input class="btn btn-primary" type="submit" value="Save"
                asp-controller="UsersCars"
                asp-action="Rent"

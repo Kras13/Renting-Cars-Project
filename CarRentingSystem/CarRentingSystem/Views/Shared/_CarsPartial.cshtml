@@ -14,7 +14,7 @@
                         <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
                         <a asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger">Delete</a>
                     }
-                    else
+                    else if (!(ViewBag.AllMode == true))
                     {
                         <a asp-controller="UsersCars" asp-action="Rent" asp-route-id="@car.Id" class="btn btn-info">Rent</a>
                     }

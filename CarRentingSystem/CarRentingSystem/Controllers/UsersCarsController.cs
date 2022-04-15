@@ -38,7 +38,6 @@ namespace CarRentingSystem.Controllers
         [Authorize]
         public IActionResult Rent(int id)
         {
-            // get only free cars
             var selectedCar = carService.CarDetailsById(id);
 
             return View(selectedCar);
