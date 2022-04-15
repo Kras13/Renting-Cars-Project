@@ -1,22 +1,22 @@
 ﻿@*<script language="JavaScript">
-    startday = new Date();
-    clockStart = startday.getTime();
+        startday = new Date();
+        clockStart = startday.getTime();
 
-    function initStopwatch() {
-        var myTime = new Date();
-        var timeNow = myTime.getTime();
-        var timeDiff = timeNow - clockStart;
-        return timeDiff / 1000;
-    }
+        function initStopwatch() {
+            var myTime = new Date();
+            var timeNow = myTime.getTime();
+            var timeDiff = timeNow - clockStart;
+            return timeDiff / 1000;
+        }
 
-    function getSecs() {
-        var mySecs = initStopwatch();
-        var mySecs1 = "" + mySecs;
-        mySecs1 = mySecs1.substring(0, mySecs1.indexOf(".")) + " secs.";
-        document.form1.timespent.value = mySecs1
-        window.setTimeout('getSecs()', 1000);
-    }
-</script>*@
+        function getSecs() {
+            var mySecs = initStopwatch();
+            var mySecs1 = "" + mySecs;
+            mySecs1 = mySecs1.substring(0, mySecs1.indexOf(".")) + " secs.";
+            document.form1.timespent.value = mySecs1
+            window.setTimeout('getSecs()', 1000);
+        }
+    </script>*@
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +57,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="All">All Categories</a>
                         </li>
+                        @if (User.IsAdmin())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="@(AdminConstants.AreaName)" asp-controller="Cars" asp-action="Schedule">Schedule</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
