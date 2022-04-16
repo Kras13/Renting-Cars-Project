@@ -9,7 +9,7 @@
     }
 </script>
 
-@{ 
+@{
     ViewBag.AllMode = true;
 }
 
@@ -17,6 +17,12 @@
 @if (TempData["Success"] != null)
 {
     <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+}
+
+@if (ViewBag.SuccessfullyDeletedCar == true)
+{
+    <p class="alert alert-success" id="successMessage">Successfully deleted car</p>
+}
 }
 
 <form method="get" id="customForm">

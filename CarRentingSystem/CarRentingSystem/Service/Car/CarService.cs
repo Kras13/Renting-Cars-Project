@@ -191,5 +191,28 @@ namespace CarRentingSystem.Service.Car
 
             return true;
         }
+
+        public bool DeleteCar(int id)
+        {
+            var selectedCar = this.data.Cars.FirstOrDefault(c => c.Id == id);
+
+            if (selectedCar == null)
+            {
+                return false;
+            }
+
+            var userCars = this.data.UsersCars.Where(c => c.CarId == id);
+
+            if (userCars != null)
+            {
+                this.data.UsersCars.RemoveRange(userCars);
+            }
+
+            this.data.Cars.Remove(selectedCar);
+
+            this.data.SaveChanges();
+
+            return true;
+        }
     }
 }

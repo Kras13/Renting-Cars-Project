@@ -182,5 +182,22 @@ namespace CarRentingSystem.Controllers
 
             return RedirectToAction(nameof(Mine));
         }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            bool deletedCar = carService.DeleteCar(id);
+
+            if (deletedCar)
+            {
+                ViewBag.SuccessfullyDeletedCar = true;
+            }
+            else
+            {
+                ViewBag.SuccessfullyDeletedCar = true;
+            }
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }
