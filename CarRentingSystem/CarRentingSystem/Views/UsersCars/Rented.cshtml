@@ -1,3 +1,40 @@
-﻿@model IEnumerable<CarServiceModel>
+﻿@using CarRentingSystem.Service.UserCar
+@model IEnumerable<UserCarsServiceModel>
+@*public int Id { get; set; }
 
-<partial name="_CarsPartial" model="Model">
+    public string Make { get; set; }
+
+    public string Model { get; set; }
+
+    public int Year { get; set; }
+
+    public string Category { get; set; }*@
+
+<div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Make</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">RentDate</th>
+                    <th scope="col">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var userCar in Model)
+                {
+                    <tr>
+                        <td>@userCar.Make</td>
+                        <td>@userCar.Model</td>
+                        <td>@userCar.Year</td>
+                        <td>@userCar.RentDate</td>
+                        <td><a asp-controller="Cars" asp-action="Details" asp-route-id="@userCar.Id">View details</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

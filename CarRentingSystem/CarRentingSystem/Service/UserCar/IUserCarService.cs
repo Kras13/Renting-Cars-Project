@@ -12,6 +12,6 @@ namespace CarRentingSystem.Service.UserCar
 
         List<CarServiceModel> FindFreeCars();
 
-        IEnumerable<CarServiceModel> UserRentedCars(string id);
+        IEnumerable<UserCarsServiceModel> UserRentedCars(string id);
     }
 }

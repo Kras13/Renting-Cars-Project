@@ -73,9 +73,9 @@ namespace CarRentingSystem.Service.UserCar
             return true;
         }
 
-        public IEnumerable<CarServiceModel> UserRentedCars(string id)
+        public IEnumerable<UserCarsServiceModel> UserRentedCars(string id)
         {
-            List<CarServiceModel> result = new List<CarServiceModel>();
+            List<UserCarsServiceModel> result = new List<UserCarsServiceModel>();
 
             var userCars = this.data.UsersCars.Where(u => u.UserId == id)
                 .Include(u => u.User)
@@ -84,14 +84,15 @@ namespace CarRentingSystem.Service.UserCar
 
             foreach (var car in userCars)
             {
-                result.Add(new CarServiceModel()
+                result.Add(new UserCarsServiceModel()
                 {
                     Id = car.CarId,
                     Category = car.Car.Category.Name,
                     ImageUrl = car.Car.ImageUrl,
                     Make = car.Car.Make,
                     Model = car.Car.Model,
-                    Year = car.Car.Year
+                    Year = car.Car.Year,
+                    RentDate = car.RentDate.Date.ToString()
                 });
             }
 
