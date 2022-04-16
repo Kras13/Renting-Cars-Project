@@ -169,7 +169,9 @@ namespace CarRentingSystem.Controllers
         [HttpPost]
         public IActionResult Edit(int id, CarFormModel car)
         {
-            if (!(User.IsAdmin() || dealerService.IsDealer(User.GetId())))
+            bool isAdmin = User.IsAdmin();
+
+            if (!(isAdmin || dealerService.IsDealer(User.GetId())))
             {
                 return RedirectToAction(nameof(DealersController.Create), "DealersController");
             }
@@ -185,16 +187,14 @@ namespace CarRentingSystem.Controllers
                 return View(car);
             }
 
-            int editorId = -1;
-
-            if (User.IsAdmin())
-            {
-
-            }
-
             int dealerId = dealerService.GetId(User.GetId()).Value;
 
-            this.carService.Edit(car.Id, car.Make, car.Model, car.Description, car.Year, dealerId);
+            this.carService.Edit(car.Id, car.Make, car.Model, car.Description, car.Year, dealerId, isAdmin);
+
+            if (isAdmin)
+            {
+                return RedirectToAction(nameof(All));
+            }
 
             return RedirectToAction(nameof(Mine));
         }

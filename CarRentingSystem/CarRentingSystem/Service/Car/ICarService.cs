@@ -24,7 +24,7 @@ namespace CarRentingSystem.Service.Car
 
         IEnumerable<CarServiceModel> GetCarsByCategoryId(int categoryId);
 
-        bool Edit(int id, string brand, string model, string description, int year, int dealerId);
+        bool Edit(int id, string brand, string model, string description, int year, int dealerId, bool isAdmin = false);
 
 
     }

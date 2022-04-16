@@ -25,8 +25,23 @@ namespace CarRentingSystem.Infrastructure
 
             SeedCategories(data);
             SeedAdministrator(serviceProvider);
+            SeedDealer(data);
 
             return app;
+        }
+
+        private static void SeedDealer(CarRentingDbContext data)
+        {
+            var admin = data.Users.FirstOrDefault(u => u.Email == "admin@abv.bg");
+
+            var dealer = data.Dealers.FirstOrDefault(d => d.UserId == admin.Id);
+
+            if (dealer == null)
+            {
+                data.Dealers.Add(new Dealer() { UserId = admin.Id, Name = "admin", PhoneNumber = "admin" });
+
+                data.SaveChanges();
+            }
         }
 
         private static void SeedCategories(CarRentingDbContext data)
@@ -73,7 +88,6 @@ namespace CarRentingSystem.Infrastructure
         {
             var userManager = services.GetRequiredService<UserManager<User>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-            var dealerManager = 
 
             Task.Run(async () =>
             {

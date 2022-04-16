@@ -173,13 +173,13 @@ namespace CarRentingSystem.Service.Car
                 });
         }
 
-        public bool Edit(int id, string brand, string model, string description, int year, int dealerId)
+        public bool Edit(int id, string brand, string model, string description, int year, int dealerId, bool isAdmin = false)
         {
-            var selectedCar = this.data.Cars.FirstOrDefault(c => c.Id == id && c.DealerId == dealerId);
+            var selectedCar = this.data.Cars.FirstOrDefault(c => c.Id == id);
 
-            if (selectedCar == null)
+            if (!isAdmin && selectedCar.DealerId != dealerId)
             {
-                throw new InvalidOperationException("Can not edi the selected car!");
+                throw new InvalidOperationException("Can not edit the selected car!");
             }
 
             selectedCar.Make = brand;
