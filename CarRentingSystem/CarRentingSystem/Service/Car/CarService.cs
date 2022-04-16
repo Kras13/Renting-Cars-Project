@@ -73,7 +73,7 @@ namespace CarRentingSystem.Service.Car
             var cars = carsQuery
                 .Skip((currentPage - 1) * carsPerPage)
                 .Take(carsPerPage)
-                .Select(c => new CarListingViewModel
+                .Select(c => new CarServiceModel
                 {
                     Id = c.Id,
                     Make = c.Make,
@@ -86,15 +86,7 @@ namespace CarRentingSystem.Service.Car
             return new CarQueryServiceModel()
             {
                 Brand = brand,
-                Cars = cars.Select(c => new CarServiceModel()
-                {
-                    Id = c.Id,
-                    Category = c.Category,
-                    ImageUrl = c.ImageUrl,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Year = c.Year
-                }),
+                Cars = cars,
                 CarsPerPage = carsPerPage,
                 CurrentPage = currentPage,
                 SearchCrit = searchCrit,

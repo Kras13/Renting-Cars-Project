@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CarRentingSystem.Service.Car;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace CarRentingSystem.Models.Cars
@@ -22,6 +23,6 @@ namespace CarRentingSystem.Models.Cars
         [DisplayName("Sort by")]
         public CarSorting Sorting { get; set; }
 
-        public IEnumerable<CarListingViewModel> Cars { get; set; }
+        public IEnumerable<CarServiceModel> Cars { get; set; }
     }
 }

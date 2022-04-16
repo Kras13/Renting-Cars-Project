@@ -19,7 +19,7 @@ namespace CarRentingSystem.Areas.Admin.Controllers
 
         public IActionResult Schedule()
         {
-            var cars = this.adminService.Schedule(3);
+            var cars = this.adminService.Schedule(10);
 
             return View(cars);
         }

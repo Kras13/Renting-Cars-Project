@@ -73,6 +73,7 @@ namespace CarRentingSystem.Infrastructure
         {
             var userManager = services.GetRequiredService<UserManager<User>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var dealerManager = 
 
             Task.Run(async () =>
             {

@@ -9,5 +9,7 @@
         public int Year { get; set; }
 
         public string Information { get; set; }
+
+        public string RentDate { get; set; }
     }
 }

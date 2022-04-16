@@ -27,16 +27,7 @@ namespace CarRentingSystem.Controllers
 
         public IActionResult Cars(int id)
         {
-            var selectedCars = this.carService.GetCarsByCategoryId(id)
-                .Select(c => new CarListingViewModel()
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Category = c.Category,
-                    ImageUrl = c.ImageUrl,
-                    Year = c.Year
-                }).ToList();
+            var selectedCars = this.carService.GetCarsByCategoryId(id);
 
             return View(selectedCars);
         }

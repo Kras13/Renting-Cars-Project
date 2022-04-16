@@ -18,7 +18,17 @@ namespace CarRentingSystem.Service.UserCar
 
         public bool CarFree(int carId)
         {
-            return !this.data.UsersCars.Any(uc => uc.CarId == carId);
+            var usersCars = this.data.UsersCars.Where(c => c.CarId == carId);
+
+            foreach (var userCar in usersCars)
+            {
+                if (userCar.RentDate == DateTime.Now.Date)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public List<CarServiceModel> FindFreeCars()
@@ -44,7 +54,7 @@ namespace CarRentingSystem.Service.UserCar
             return result;
         }
 
-        public bool RentCar(string userId, int carId, int days)
+        public bool RentCar(string userId, int carId, DateTime rentDate)
         {
             if (!CarFree(carId))
             {
@@ -55,7 +65,7 @@ namespace CarRentingSystem.Service.UserCar
             {
                 CarId = carId,
                 UserId = userId,
-                RentDays = days
+                RentDate = rentDate
             });
 
             this.data.SaveChanges();

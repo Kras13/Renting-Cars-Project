@@ -1,5 +1,6 @@
 namespace CarRentingSystem
 {
+    using CarRentingSystem.Areas.Admin.Service;
     using CarRentingSystem.Data;
     using CarRentingSystem.Data.Models;
     using CarRentingSystem.Infrastructure;
@@ -54,6 +55,7 @@ namespace CarRentingSystem
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IDealerService, DealerService>();
             services.AddTransient<IUserCarService, UserCarService>();
+            services.AddTransient<IAdminService, AdminService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

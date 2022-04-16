@@ -26,5 +26,6 @@ namespace CarRentingSystem.Service.Car
 
         bool Edit(int id, string brand, string model, string description, int year, int dealerId);
 
+
     }
 }

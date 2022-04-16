@@ -26,9 +26,9 @@ namespace CarRentingSystem.Controllers
         [Authorize]
         public IActionResult Add()
         {
-            if (!this.userService.CurrentUser(User.GetId()).IsDealer)
+            if (!(User.IsAdmin() || dealerService.IsDealer(User.GetId())))
             {
-                return RedirectToAction("Create", "Dealers");
+                return RedirectToAction(nameof(DealersController.Create), "DealersController");
             }
 
             return View(new CarFormModel
@@ -42,11 +42,9 @@ namespace CarRentingSystem.Controllers
         [Authorize]
         public IActionResult Add(CarFormModel car)
         {
-            var currentUser = userService.CurrentUser(User.GetId());
-
-            if (!currentUser.IsDealer)
+            if (!(User.IsAdmin() || dealerService.IsDealer(User.GetId())))
             {
-                return RedirectToAction("Become", "Dealers");
+                return RedirectToAction(nameof(DealersController.Create), "DealersController");
             }
 
             if (!this.carService.GetCategories().Any(c => c.Id == car.CategoryId))
@@ -73,7 +71,7 @@ namespace CarRentingSystem.Controllers
                 Year = car.Year,
                 ImageUrl = car.ImageUrl,
                 CategoryId = car.CategoryId,
-                DealerId = currentUser.DealerId
+                DealerId = dealerService.GetId(User.GetId()).Value
             });
 
             TempData["Success"] = "Car added successfully!";
@@ -87,19 +85,9 @@ namespace CarRentingSystem.Controllers
             var resultView = this.carService
                 .QueriedCars(query.Brand, query.SearchCrit, query.Sorting, query.CurrentPage, query.CarsPerPage);
 
-            query.Cars = resultView.Cars.Select(c => new CarListingViewModel()
-            {
-                Id = c.Id,
-                Category = c.Category,
-                ImageUrl = c.ImageUrl,
-                Make = c.Make,
-                Model = c.Model,
-                Year = c.Year
-            });
+            query.Cars = resultView.Cars;
             query.Brands = resultView.Brands;
             query.TotalCars = resultView.TotalCars;
-            // query.CurrentPage = resultView.CurrentPage;
-            //query.CarsPerPage = resultView.CarsPerPage;
 
             return View(query);
         }
@@ -128,21 +116,24 @@ namespace CarRentingSystem.Controllers
             {
                 throw new InvalidOperationException("Cars/Mine...");
             }
-            // check if currentUserIsDealer
 
-            var currentUserCars = this.carService.GetDealerCars(User.GetId())
-                .Select(c => new CarListingViewModel()
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Year = c.Year,
-                    Category = c.Category,
-                    ImageUrl = c.ImageUrl
-                }).ToList();
-
+            var currentUserCars = this.carService.GetDealerCars(User.GetId()).ToList();
             return View(currentUserCars);
         }
+
+        [Authorize]
+        public IActionResult Rented()
+        {
+            if (User.IsAdmin() || dealerService.IsDealer(User.GetId()))
+            {
+                throw new InvalidOperationException("Dealers and admins can not rent cars");
+            }
+
+            //current user owned cars
+
+            return View();
+        }
+
 
         [Authorize]
         public IActionResult Edit(int id)
@@ -178,11 +169,9 @@ namespace CarRentingSystem.Controllers
         [HttpPost]
         public IActionResult Edit(int id, CarFormModel car)
         {
-            var currentUser = userService.CurrentUser(User.GetId());
-
-            if (!currentUser.IsDealer)
+            if (!(User.IsAdmin() || dealerService.IsDealer(User.GetId())))
             {
-                return RedirectToAction("Become", "Dealers");
+                return RedirectToAction(nameof(DealersController.Create), "DealersController");
             }
 
             if (!ModelState.IsValid)
@@ -196,7 +185,16 @@ namespace CarRentingSystem.Controllers
                 return View(car);
             }
 
-            this.carService.Edit(car.Id, car.Make, car.Model, car.Description, car.Year, currentUser.DealerId);
+            int editorId = -1;
+
+            if (User.IsAdmin())
+            {
+
+            }
+
+            int dealerId = dealerService.GetId(User.GetId()).Value;
+
+            this.carService.Edit(car.Id, car.Make, car.Model, car.Description, car.Year, dealerId);
 
             return RedirectToAction(nameof(Mine));
         }

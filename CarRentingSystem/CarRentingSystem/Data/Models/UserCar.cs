@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarRentingSystem.Data.Models
 {
@@ -12,6 +13,6 @@ namespace CarRentingSystem.Data.Models
         public int CarId { get; set; }
         public Car Car { get; set; }
 
-        public int RentDays { get; set; }
+        public DateTime RentDate { get; set; }
     }
 }

@@ -16,12 +16,13 @@ namespace CarRentingSystem.Areas.Admin.Service
         public IEnumerable<ScheduleModel> Schedule(int records)
         {
             var userCars = this.data.UsersCars
+                .OrderByDescending(c => c.UserId)
                 .Select(c => new ScheduleModel()
                 {
                     Make = c.Car.Make,
                     Model = c.Car.Model,
                     Year = c.Car.Year,
-                    Information = c.User.FullName
+                    Information = c.User.FullName + " owned on " + c.RentDate.Date.ToString()
                 }).Take(records);
 
             return userCars;
