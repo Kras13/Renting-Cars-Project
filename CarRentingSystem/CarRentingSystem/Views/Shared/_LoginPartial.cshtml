@@ -19,13 +19,16 @@
                 <a class="nav-link text-dark" asp-controller="Cars" asp-action="Mine">My Cars</a>
             </li>
         }
-        else if(!userIsAdmin)
+        else if (!userIsAdmin)
         {
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-controller="Dealers" asp-action="Create">Become Dealer</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-controller="UsersCars" asp-action="Available">Rent a car</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="UsersCars" asp-action="Rented">My rented cars</a>
             </li>
         }
 

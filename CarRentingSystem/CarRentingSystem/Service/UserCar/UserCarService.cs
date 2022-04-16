@@ -72,5 +72,30 @@ namespace CarRentingSystem.Service.UserCar
 
             return true;
         }
+
+        public IEnumerable<CarServiceModel> UserRentedCars(string id)
+        {
+            List<CarServiceModel> result = new List<CarServiceModel>();
+
+            var userCars = this.data.UsersCars.Where(u => u.UserId == id)
+                .Include(u => u.User)
+                .Include(c => c.Car)
+                .ThenInclude(c => c.Category);
+
+            foreach (var car in userCars)
+            {
+                result.Add(new CarServiceModel()
+                {
+                    Id = car.CarId,
+                    Category = car.Car.Category.Name,
+                    ImageUrl = car.Car.ImageUrl,
+                    Make = car.Car.Make,
+                    Model = car.Car.Model,
+                    Year = car.Car.Year
+                });
+            }
+
+            return result;
+        }
     }
 }

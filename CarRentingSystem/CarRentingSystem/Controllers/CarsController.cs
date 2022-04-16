@@ -122,20 +122,6 @@ namespace CarRentingSystem.Controllers
         }
 
         [Authorize]
-        public IActionResult Rented()
-        {
-            if (User.IsAdmin() || dealerService.IsDealer(User.GetId()))
-            {
-                throw new InvalidOperationException("Dealers and admins can not rent cars");
-            }
-
-            //current user owned cars
-
-            return View();
-        }
-
-
-        [Authorize]
         public IActionResult Edit(int id)
         {
             if (!(User.IsAdmin() || dealerService.IsDealer(User.GetId())))

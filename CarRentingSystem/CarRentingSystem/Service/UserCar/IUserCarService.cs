@@ -11,5 +11,7 @@ namespace CarRentingSystem.Service.UserCar
         bool CarFree(int carId);
 
         List<CarServiceModel> FindFreeCars();
+
+        IEnumerable<CarServiceModel> UserRentedCars(string id);
     }
 }

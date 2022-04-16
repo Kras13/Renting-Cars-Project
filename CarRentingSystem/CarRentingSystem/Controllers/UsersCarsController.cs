@@ -1,12 +1,10 @@
 ﻿using CarRentingSystem.Infrastructure;
-using CarRentingSystem.Models.Cars;
 using CarRentingSystem.Service.Car;
 using CarRentingSystem.Service.Dealer;
 using CarRentingSystem.Service.UserCar;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 
 namespace CarRentingSystem.Controllers
 {
@@ -57,7 +55,20 @@ namespace CarRentingSystem.Controllers
 
             ViewBag.SuccessfullRent = true;
 
-            return RedirectToAction("Rented", "Cars");
+            return RedirectToAction(nameof(Rented));
+        }
+
+        [Authorize]
+        public IActionResult Rented()
+        {
+            if (User.IsAdmin() || dealerService.IsDealer(User.GetId()))
+            {
+                throw new InvalidOperationException("Dealers and admins can not rent cars");
+            }
+
+            var userCars = this.userCarService.UserRentedCars(User.GetId());
+
+            return View(userCars);
         }
     }
 }
