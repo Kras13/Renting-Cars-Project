@@ -12,13 +12,11 @@ namespace CarRentingSystem.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly IUserService userService;
         private readonly ICarService carService;
         private readonly IDealerService dealerService;
 
-        public CarsController(IUserService userService, ICarService carService, IDealerService dealerService)
+        public CarsController(ICarService carService, IDealerService dealerService)
         {
-            this.userService = userService;
             this.carService = carService;
             this.dealerService = dealerService;
         }

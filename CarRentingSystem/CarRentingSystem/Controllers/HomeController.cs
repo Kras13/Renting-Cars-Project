@@ -6,7 +6,6 @@
     using CarRentingSystem.Service;
     using CarRentingSystem.Service.Car;
     using Microsoft.AspNetCore.Mvc;
-    using System.Diagnostics;
     using System.Linq;
 
     public class HomeController : Controller
