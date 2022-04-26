@@ -42,5 +42,5 @@ namespace CarRentingSystem.Service.Car
         [DisplayName("Sort by")]
         public CarSorting Sorting { get; set; }
 
-        public IEnumerable<CarListingViewModel> Cars { get; set; }
+        public IEnumerable<CarServiceModel> Cars { get; set; }
  */
