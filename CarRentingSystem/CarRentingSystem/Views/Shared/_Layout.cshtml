@@ -1,32 +1,12 @@
-﻿@*<script language="JavaScript">
-        startday = new Date();
-        clockStart = startday.getTime();
-
-        function initStopwatch() {
-            var myTime = new Date();
-            var timeNow = myTime.getTime();
-            var timeDiff = timeNow - clockStart;
-            return timeDiff / 1000;
-        }
-
-        function getSecs() {
-            var mySecs = initStopwatch();
-            var mySecs1 = "" + mySecs;
-            mySecs1 = mySecs1.substring(0, mySecs1.indexOf(".")) + " secs.";
-            document.form1.timespent.value = mySecs1
-            window.setTimeout('getSecs()', 1000);
-        }
-    </script>*@
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CarRentingSystem</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/cars.css">
+    <link rel="stylesheet" href="~/css/cars.css" />
+    <link rel="stylesheet" href="~/css/shared.css" />
 </head>
 <body onload="window.setTimeout('getSecs()',1)">
     <form name="form1">
@@ -74,15 +54,7 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
