@@ -180,8 +180,10 @@ namespace CarRentingSystem.Data.Migrations
 
             modelBuilder.Entity("CarRentingSystem.Data.Models.UserCar", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CarId")
                         .HasColumnType("int");
@@ -189,9 +191,14 @@ namespace CarRentingSystem.Data.Migrations
                     b.Property<DateTime>("RentDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserId", "CarId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UsersCars");
                 });
@@ -369,9 +376,7 @@ namespace CarRentingSystem.Data.Migrations
 
                     b.HasOne("CarRentingSystem.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Car");
 

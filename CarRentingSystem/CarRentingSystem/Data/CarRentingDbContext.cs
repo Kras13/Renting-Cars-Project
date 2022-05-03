@@ -43,9 +43,6 @@
                 .HasForeignKey<Dealer>(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<UserCar>()
-                .HasKey(c => new { c.UserId, c.CarId });
-
             base.OnModelCreating(builder);
         }
     }
