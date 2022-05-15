@@ -80,7 +80,8 @@ namespace CarRentingSystem.Service.UserCar
             var userCars = this.data.UsersCars.Where(u => u.UserId == id)
                 .Include(u => u.User)
                 .Include(c => c.Car)
-                .ThenInclude(c => c.Category);
+                .ThenInclude(c => c.Category)
+                .ToArray();
 
             foreach (var car in userCars)
             {
