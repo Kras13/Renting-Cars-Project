@@ -39,7 +39,7 @@
             </div>
             <div>
                 <label asp-for="CarsPerPage"></label>
-                <select asp-for="CarsPerPage" class="form-control">
+                <select asp-for="CarsPerPage" class="form-control" onchange="this.form.submit()">
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="10">10</option>
