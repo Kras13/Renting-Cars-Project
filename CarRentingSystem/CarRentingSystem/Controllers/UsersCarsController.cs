@@ -37,20 +37,6 @@ namespace CarRentingSystem.Controllers
                 throw new InvalidOperationException("Dealers and admins can not rent cars");
             }
 
-            var selectedCar = carService.CarDetailsById(id);
-
-            return View(selectedCar);
-        }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult Rent(int id, int days)
-        {
-            if (User.IsAdmin() || dealerService.IsDealer(User.GetId()))
-            {
-                throw new InvalidOperationException("Dealers and admins can not rent cars");
-            }
-
             this.userCarService.RentCar(User.GetId(), id, DateTime.Now.Date);
 
             ViewBag.SuccessfullRent = true;

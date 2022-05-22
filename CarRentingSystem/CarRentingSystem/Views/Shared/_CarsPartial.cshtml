@@ -16,10 +16,64 @@
                     }
                     else if (!(ViewBag.AllMode == true))
                     {
-                        <a asp-controller="UsersCars" asp-action="Rent" asp-route-id="@car.Id" class="btn btn-info">Rent</a>
+                        @*<a asp-controller="UsersCars" asp-action="Rent" asp-route-id="@car.Id" class="btn btn-info">Rent</a>*@
+
+                        <a href="#" class="btn btn-danger" onclick="ConfirmRent(@car.Id)">Rent</a>
+                        <div class="modal fade" id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                                        <h3 class="modal-title">Rent the Car</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4>Are you sure you want to rent @(car.Make + " " + car.Model)?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                                        <a href="#" class="btn btn-success" onclick="RentCar()">Confirm</a>
+                                        @*<a asp-controller="UsersCars" asp-action="Rent" asp-route-id="@car.Id" class="btn btn-info">Confirm</a>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="hiddenCarId" />
                     }
                 </div>
             </div>
         </div>
     }
 </div>
+
+<script>
+    var ConfirmRent = function (CarId) {
+        $("#hiddenCarId").val(CarId);
+        $("#myModal").modal('show');
+    }
+
+    var RentCar = function () {
+        var carId = $("#hiddenCarId").val();
+
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/UsersCars/Rent",
+        //    data: { id: carId },
+        //    success: function (result) {
+        //        $("#myModal").modal("hide");
+        //        $("#row_" + carId).remove();
+        //    }
+        //})
+
+        $.ajax({
+            type: "GET",
+            url: "/UsersCars/Rent",
+            data: { id: carId },
+            success: function () {
+                $("#myModal").modal("hide");
+                $("#row_" + carId).remove();
+                location.reload();
+            }
+        });
+    }
+</script>
