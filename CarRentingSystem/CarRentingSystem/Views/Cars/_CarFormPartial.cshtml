@@ -7,28 +7,33 @@
             <form method="post">
                 <div class="form-group">
                     <label asp-for="Make"></label>
-                    <input asp-for="Make" class="form-control" placeholder="BMW, Audi, etc...">
+                    <input asp-for="Make" id="MakeInput" oninput="MakeValidation()" class="form-control" placeholder="BMW, Audi, etc...">
                     <span asp-validation-for="Make" class="small text-danger"></span>
+                    <p id="MakeValText"></p>
                 </div>
                 <div class="form-group">
                     <label asp-for="Model"></label>
-                    <input asp-for="Model" class="form-control" placeholder="330i, A3, etc...">
+                    <input asp-for="Model" id="ModelInput" oninput="ModelValidation()" class="form-control" placeholder="330i, A3, etc...">
                     <span asp-validation-for="Model" class="small text-danger"></span>
+                    <p id="ModelValText"></p>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description"></label>
-                    <textarea asp-for="Description" class="form-control" placeholder="Vehicle description" rows="3"></textarea>
+                    <textarea asp-for="Description" id="DescriptionInput" oninput="DescriptionValidation()" class="form-control" placeholder="Vehicle description" rows="3"></textarea>
                     <span asp-validation-for="Description" class="small text-danger"></span>
+                    <p id="DescriptionValText"></p>
                 </div>
                 <div class="form-group">
                     <label asp-for="ImageUrl">Image Url</label>
-                    <input asp-for="ImageUrl" class="form-control" placeholder="Yor URL">
+                    <input asp-for="ImageUrl" id="ImageUrlInput" oninput="ImageUrlValidation()" class="form-control" placeholder="Yor URL">
                     <span asp-validation-for="ImageUrl" class="small text-danger"></span>
+                    <p id="ImageUrlValText"></p>
                 </div>
                 <div class="form-group">
                     <label asp-for="Year">Year</label>
-                    <input asp-for="Year" class="form-control" placeholder="2021">
+                    <input asp-for="Year" id="YearInput" oninput="YearValidation()" class="form-control" placeholder="2021">
                     <span asp-validation-for="Year" class="small text-danger"></span>
+                    <p id="YearValText"></p>
                 </div>
                 <div class="form-group">
                     <label asp-for="CategoryId"></label>
@@ -46,6 +51,94 @@
     </div>
 </div>
 
-@section Scripts{
-    <partial name="_ValidationScriptsPartial" />
-}
+<script>
+    function MakeValidation() {
+        let inpObj = document.getElementById("MakeInput").value;
+        let message = new String();
+        let formattedMessage;
+
+        if (inpObj.length < 2) {
+            message = "Make is required and must be at least 2 symbols!";
+            formattedMessage = message.fontcolor("red");
+        }
+        else {
+            message = "Correct!";
+            formattedMessage = message.fontcolor("green");
+        }
+
+        document.getElementById("MakeValText").innerHTML = formattedMessage;
+        
+    }
+
+    function ModelValidation() {
+        let inpObj = document.getElementById("ModelInput").value;
+        let message = new String();
+        let formattedMessage;
+
+        if (inpObj.length < 2) {
+            message = "Model is required and must be at least 2 symbols!";
+            formattedMessage = message.fontcolor("red");
+        }
+        else {
+            message = "Correct!";
+            formattedMessage = message.fontcolor("green");
+        }
+
+        document.getElementById("ModelValText").innerHTML = formattedMessage;
+    }
+
+    function DescriptionValidation() {
+        let inpObj = document.getElementById("DescriptionInput").value;
+        let message = new String();
+        let formattedMessage;
+
+        if (inpObj.length < 10) {
+            message = "Model is required and must be at least 10 symbols!";
+            formattedMessage = message.fontcolor("red");
+        }
+        else {
+            message = "Correct!";
+            formattedMessage = message.fontcolor("green");
+        }
+
+        document.getElementById("DescriptionValText").innerHTML = formattedMessage;
+    }
+
+    function ImageUrlValidation() {
+        let inpObj = document.getElementById("ImageUrlInput").value;
+        let message = new String();
+        let formattedMessage;
+
+        if (inpObj.lengt < 2) {
+            message = "Image Url is reqiured!";
+            formattedMessage = message.fontcolor("red");
+        }
+        else {
+            message = "Correct!";
+            formattedMessage = message.fontcolor("green");
+        }
+
+        document.getElementById("ImageUrlValText").innerHTML = formattedMessage;
+    }
+
+    function YearValidation() {
+        let inpObj = document.getElementById("YearInput").value;
+        let message = new String();
+        let formattedMessage;
+
+        if (inpObj < 1980) {
+            message = "Car year must be bigger than 1980";
+            formattedMessage = message.fontcolor("red");
+        }
+        else {
+            message = "Correct!";
+            formattedMessage = message.fontcolor("green");
+        }
+
+        document.getElementById("YearValText").innerHTML = formattedMessage;
+    }
+</script>
+
+@*@section Scripts{
+        <partial name="_ValidationScriptsPartial" />
+    }*@

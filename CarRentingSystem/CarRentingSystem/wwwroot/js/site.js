@@ -1,5 +1,5 @@
-﻿startday = new Date();
-clockStart = startday.getTime();
+﻿//startday = new Date();
+//clockStart = startday.getTime();
 
 function initStopwatch() {
     var myTime = new Date();
